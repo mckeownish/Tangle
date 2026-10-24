@@ -4,20 +4,26 @@ import numpy
 
 
 extensions = [
+
     Extension(
         "wiggle.writhe", 
         ["cython_src/writhe_c.pyx"],
-        extra_compile_args=['-fopenmp'],  # ADD THIS
-        extra_link_args=['-fopenmp'],      # ADD THIS
-        include_dirs=[numpy.get_include()]
-    ),
-]
+        extra_compile_args=['-O3',
+                            '-march=native',
+                            '-funroll-loops', 
+                            '-fopenmp',
+                            '-ffast-math',],
+
+        extra_link_args=['-fopenmp'],
+        include_dirs=[numpy.get_include()])
+    ]
+
     
 
 # Use cythonize on the extensions
 setup(
     name='wiggle',
-    version='0.6',
+    version='0.8',
     packages=find_packages(),
     ext_modules=cythonize(
         extensions,
